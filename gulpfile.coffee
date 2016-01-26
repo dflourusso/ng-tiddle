@@ -31,13 +31,21 @@ gulp.task 'build', ->
     .pipe(concat('ng-tiddle.min.js'))
     .pipe(gulp.dest('dist'))
 
+gulp.task 'examples', ->
+  gulp.src 'examples/**/*.coffee'
+  .pipe plumber()
+  .pipe ngClassify(appName: 'ng-tiddle-examples')
+  .pipe coffee(bare: no)
+  .pipe(gulp.dest("examples"))
+
 gulp.task 'server', ->
   connect.server(root: [__dirname], port: 8888)
 
 gulp.task 'watch', ->
   gulp.watch 'src/**/*', ['build']
+  gulp.watch 'examples/**/*.coffee', ['examples']
 
-gulp.task 'default', ['build']
+gulp.task 'default', ['build', 'examples']
 
 gulp.task 'clear', ->
   del 'dist/'
