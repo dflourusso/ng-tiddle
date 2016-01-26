@@ -45,6 +45,6 @@ Ex: `ngTiddleAuthService.signOut()`
 
 ### Obter usuário logado
 
-Utilize o service **ngTiddleiSessionService**.
+Utilize o service **ngTiddleSessionService**.
 
-Ex: `ngTiddleiSessionService.getResource()`
+Ex: `ngTiddleSessionService.getResource()`
