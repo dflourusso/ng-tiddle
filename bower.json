@@ -1,0 +1,22 @@
+{
+  "name": "ng-tiddle",
+  "version": "0.1.0",
+  "description": "Angularjs App Client to Tiddle GEM",
+  "author": "Daniel Fernando Lourusso",
+  "license": "MIT",
+  "homepage": "dflourusso.com.br",
+  "main": [
+    "dist/ng-tiddle.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "jquery": "~2.1.4"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "ng-tiddle",
+  "env": "development",
+  "paths": {
+    "src": {
+      "root": "./src",
+      "index": "./src/index.jade",
+      "partials": "./src/**/*.tpl.jade",
+      "styles": "./src/**/*.less",
+      "scripts": "./src/**/*.coffee",
+      "assets": "./src/assets/**/*",
+      "mocks": "./spec/mocks/**/*"
+    },
+    "dev": {
+      "root": "./dev",
+      "vendor": "./dev/vendor",
+      "styles": "./dev/css",
+      "scripts": "./dev/js",
+      "assets": "./dev/assets"
+    },
+    "test": {
+      "root": "./test",
+      "vendor": "./test/vendor",
+      "styles": "./test/css",
+      "scripts": "./test/js",
+      "assets": "./test/assets"
+    },
+    "pro": {
+      "root": "./dist",
+      "vendor": "./dist/vendor",
+      "styles": "./dist/css",
+      "scripts": "./dist/js",
+      "assets": "./dist/assets"
+    },
+    "tmp": "./tmp",
+    "e2e": "./e2e"
+  }
+}

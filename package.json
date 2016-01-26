@@ -1,0 +1,53 @@
+{
+  "name": "ng-tiddle",
+  "version": "0.1.0",
+  "description": "Angularjs App Client to Tiddle GEM",
+  "main": "dist/tiddle-auth.js",
+  "scripts": {
+    "lint": "git diff --name-only --diff-filter=ACM --staged | grep .coffee | xargs ./node_modules/coffeelint/bin/coffeelint",
+    "test": "gulp test",
+    "spec": "gulp spec"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "pre-push": [
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dflourusso/ng-tiddle.git"
+  },
+  "author": "Daniel Fernando Lourusso",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.9.3",
+    "coffeelint": "^1.11.1",
+    "del": "^1.2.1",
+    "event-stream": "^3.3.1",
+    "gulp": "^3.9.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-coffeelint": "^0.5.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-inject": "^1.5.0",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-ng-classify": "^4.0.1",
+    "gulp-ng-constant": "^0.3.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-open": "^1.0.0",
+    "gulp-order": "^1.1.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rev": "^6.0.0",
+    "gulp-sloc": "^1.0.4",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "main-bower-files": "^2.9.0",
+    "pre-commit": "^1.1.1",
+    "pre-push": "^0.1.1",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.1.2"
+  }
+}
