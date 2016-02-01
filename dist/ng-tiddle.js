@@ -79,10 +79,10 @@
             return properties.model_name = model_name;
           },
           getSignInStrategy: function() {
-            return properties.ign_in_strategy;
+            return properties.sign_in_strategy;
           },
           setSignInStrategy: function(sign_in_strategy) {
-            return properties.ign_in_strategy = sign_in_strategy;
+            return properties.sign_in_strategy = sign_in_strategy;
           },
           getApiResourcePath: function() {
             return properties.api_resource_path;
