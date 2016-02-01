@@ -62,7 +62,7 @@
       this.sign_in_path = '/auth/sign_in';
       this.return_path = '/';
       this.api_resource_path = 'users';
-      this.$get = function($location) {
+      this.$get = function() {
         return {
           getApiRoot: (function(_this) {
             return function() {
@@ -124,16 +124,12 @@
               return _this.api_resource_path = api_resource_path;
             };
           })(this),
-          onUnauthorized: (function(_this) {
-            return function() {
-              return $location.path(_this.sign_in_path);
-            };
-          })(this),
-          onAuthorize: (function(_this) {
-            return function() {
-              return $location.path(_this.return_path);
-            };
-          })(this)
+          onUnauthorized: function() {
+            return console.warn('No unauthorized callback was defined');
+          },
+          onAuthorize: function(auth_data) {
+            return console.info('No authorize callback was defined', auth_data);
+          }
         };
       };
     }
@@ -160,7 +156,7 @@
       ret.then((function(_this) {
         return function(response) {
           _this.ngTiddleSessionService.setResource(response.data[_this.tap.getModelName()], response.data.authentication_token);
-          return _this.tap.onAuthorize();
+          return _this.tap.onAuthorize(response.data);
         };
       })(this));
       return ret;
