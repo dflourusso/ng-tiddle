@@ -1,22 +1,25 @@
 class NgTiddleAuth extends Provider
   constructor: ->
-    @api_root = 'http://localhost:3000/'
-    @model_name = 'user'
-    @sign_in_strategy = 'email'
-    @api_resource_path = 'users'
+    @properties =
+      api_root: 'http://localhost:3000/'
+      model_name: 'user'
+      sign_in_strategy: 'email'
+      api_resource_path: 'users'
 
     @$get = ->
-      getApiRoot: => @api_root
-      setApiRoot: (api_root) => @api_root = api_root
+      properties = @properties
 
-      getModelName: => @model_name
-      setModelName: (model_name) => @model_name = model_name
+      getApiRoot: -> properties.api_root
+      setApiRoot: (api_root) -> properties.api_root = api_root
 
-      getSignInStrategy: => @sign_in_strategy
-      setSignInStrategy: (sign_in_strategy) => @sign_in_strategy = sign_in_strategy
+      getModelName: -> properties.model_name
+      setModelName: (model_name) -> properties.model_name = model_name
 
-      getApiResourcePath: => @api_resource_path
-      setApiResourcePath: (api_resource_path) => @api_resource_path = api_resource_path
+      getSignInStrategy: -> properties.ign_in_strategy
+      setSignInStrategy: (sign_in_strategy) -> properties.ign_in_strategy = sign_in_strategy
+
+      getApiResourcePath: -> properties.api_resource_path
+      setApiResourcePath: (api_resource_path) -> properties.api_resource_path = api_resource_path
 
       onUnauthorized: -> console.warn 'No unauthorized callback was defined'
       onAuthorize: (auth_data) -> console.info 'No authorize callback was defined', auth_data
