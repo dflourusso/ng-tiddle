@@ -25,13 +25,13 @@
 * `ApiRoot` -> Host da API a ser utilizada para autenticação. Ex: **http://localhost:3000**
 * `SignInStrategy` -> Nome da key utilizada pelo devise para realizar a autenticação. Default: **email**
 * `ApiResourcePath` -> Path base para autenticação. Ex: **users**
-* `onUnauthorized:` -> Método a ser executado quando for feita alguma requisição com usuário não logado. Por padrão ele redireciona para o **SignInPath**. Pode ser sobrescrito com uma função e abre um *pop pup* por exemplo
+* `onUnauthorized:` -> Callback a ser executado quando for feita alguma requisição com usuário não logado.
 
  * Example:
 
     `ngTiddleAuthProvider.onUnauthorized = function(){console.log('Faça alguma coisa');}`
 
-* `onAuthorize:` -> Método a ser executado quando login for realizado com sucesso. Por padrão ele redireciona para o **ReturnPath**. Também pode ser sobrescrito.
+* `onAuthorize:` -> Callback a ser executado quando login for realizado com sucesso.
 
  * Example:
 
