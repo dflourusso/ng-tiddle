@@ -13,6 +13,9 @@ gutil        = require 'gulp-util'
 autoprefixer = require 'gulp-autoprefixer'
 bump         = require 'gulp-bump'
 argv         = require('yargs').argv
+tag_version  = require 'gulp-tag-version'
+filter       = require 'gulp-filter'
+git          = require 'gulp-git'
 del          = require 'del'
 
 gulp.task 'build', ->
@@ -58,3 +61,6 @@ gulp.task 'bump', ->
   gulp.src ['./bower.json', './package.json']
   .pipe bump type: argv.type
   .pipe gulp.dest './'
+  .pipe git.commit 'bumps package version'
+  .pipe filter 'bower.json'
+  .pipe tag_version(prefix: '')
