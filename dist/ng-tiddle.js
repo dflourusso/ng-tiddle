@@ -56,52 +56,40 @@
 
   NgTiddleAuth = (function() {
     function NgTiddleAuth() {
-      this.api_root = 'http://localhost:3000/';
-      this.model_name = 'user';
-      this.sign_in_strategy = 'email';
-      this.api_resource_path = 'users';
+      this.properties = {
+        api_root: 'http://localhost:3000/',
+        model_name: 'user',
+        sign_in_strategy: 'email',
+        api_resource_path: 'users'
+      };
       this.$get = function() {
+        var properties;
+        properties = this.properties;
         return {
-          getApiRoot: (function(_this) {
-            return function() {
-              return _this.api_root;
-            };
-          })(this),
-          setApiRoot: (function(_this) {
-            return function(api_root) {
-              return _this.api_root = api_root;
-            };
-          })(this),
-          getModelName: (function(_this) {
-            return function() {
-              return _this.model_name;
-            };
-          })(this),
-          setModelName: (function(_this) {
-            return function(model_name) {
-              return _this.model_name = model_name;
-            };
-          })(this),
-          getSignInStrategy: (function(_this) {
-            return function() {
-              return _this.sign_in_strategy;
-            };
-          })(this),
-          setSignInStrategy: (function(_this) {
-            return function(sign_in_strategy) {
-              return _this.sign_in_strategy = sign_in_strategy;
-            };
-          })(this),
-          getApiResourcePath: (function(_this) {
-            return function() {
-              return _this.api_resource_path;
-            };
-          })(this),
-          setApiResourcePath: (function(_this) {
-            return function(api_resource_path) {
-              return _this.api_resource_path = api_resource_path;
-            };
-          })(this),
+          getApiRoot: function() {
+            return properties.api_root;
+          },
+          setApiRoot: function(api_root) {
+            return properties.api_root = api_root;
+          },
+          getModelName: function() {
+            return properties.model_name;
+          },
+          setModelName: function(model_name) {
+            return properties.model_name = model_name;
+          },
+          getSignInStrategy: function() {
+            return properties.ign_in_strategy;
+          },
+          setSignInStrategy: function(sign_in_strategy) {
+            return properties.ign_in_strategy = sign_in_strategy;
+          },
+          getApiResourcePath: function() {
+            return properties.api_resource_path;
+          },
+          setApiResourcePath: function(api_resource_path) {
+            return properties.api_resource_path = api_resource_path;
+          },
           onUnauthorized: function() {
             return console.warn('No unauthorized callback was defined');
           },
