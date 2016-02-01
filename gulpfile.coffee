@@ -49,4 +49,4 @@ gulp.task 'bump', ->
   .pipe gulp.dest './'
   .pipe $.git.commit 'bumps package version'
   .pipe $.filter 'bower.json'
-  .pipe $.tag_version(prefix: '')
+  .pipe $.tagVersion(prefix: '')
