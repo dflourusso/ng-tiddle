@@ -43,6 +43,7 @@ gulp.task 'clear', ->
 
 # Sem parametro executa "bump patch"
 # Ou passar o tipo desejado: "gulp bump --type minor"
+# Opcoes permitidas: major|minor|patch|prerelease
 gulp.task 'bump', ->
   gulp.src ['./bower.json', './package.json']
   .pipe $.bump type: argv.type
