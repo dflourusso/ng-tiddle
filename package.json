@@ -48,6 +48,7 @@
     "pre-commit": "^1.1.1",
     "pre-push": "^0.1.1",
     "require-dir": "^0.3.0",
-    "run-sequence": "^1.1.2"
+    "run-sequence": "^1.1.2",
+    "yargs": "^3.32.0"
   }
 }
