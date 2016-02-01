@@ -1,6 +1,6 @@
 {
   "name": "ng-tiddle",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Angularjs App Client to Tiddle GEM",
   "main": "dist/tiddle-auth.js",
   "scripts": {
