@@ -3,8 +3,6 @@ class NgTiddleAuth extends Provider
     @api_root = 'http://localhost:3000/'
     @model_name = 'user'
     @sign_in_strategy = 'email'
-    @sign_in_path = '/auth/sign_in'
-    @return_path = '/'
     @api_resource_path = 'users'
 
     @$get = ->
@@ -16,12 +14,6 @@ class NgTiddleAuth extends Provider
 
       getSignInStrategy: => @sign_in_strategy
       setSignInStrategy: (sign_in_strategy) => @sign_in_strategy = sign_in_strategy
-
-      getSignInPath: => @sign_in_path
-      setSignInPath: (sign_in_path) => @sign_in_path = sign_in_path
-
-      getReturnPath: => @return_path
-      setReturnPath: (return_path) => @return_path = return_path
 
       getApiResourcePath: => @api_resource_path
       setApiResourcePath: (api_resource_path) => @api_resource_path = api_resource_path
