@@ -12,6 +12,7 @@ notify       = require 'gulp-notify'
 gutil        = require 'gulp-util'
 autoprefixer = require 'gulp-autoprefixer'
 bump         = require 'gulp-bump'
+argv         = require('yargs').argv
 del          = require 'del'
 
 gulp.task 'build', ->
@@ -51,7 +52,9 @@ gulp.task 'default', ['build', 'examples']
 gulp.task 'clear', ->
   del 'dist/'
 
+# Sem parametro executa "bump patch"
+# Ou passar o tipo desejado: "gulp bump --type minor"
 gulp.task 'bump', ->
   gulp.src ['./bower.json', './package.json']
-  .pipe bump()
+  .pipe bump type: argv.type
   .pipe gulp.dest './'
