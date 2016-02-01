@@ -27,4 +27,4 @@ class NgTiddleAuth extends Provider
       setApiResourcePath: (api_resource_path) => @api_resource_path = api_resource_path
 
       onUnauthorized: -> console.warn 'No unauthorized callback was defined'
-      onAuthorize: -> console.info 'No authorize callback was defined'
+      onAuthorize: (auth_data) -> console.info 'No authorize callback was defined', auth_data

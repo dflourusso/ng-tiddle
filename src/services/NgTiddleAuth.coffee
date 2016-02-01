@@ -11,7 +11,7 @@ class NgTiddleAuth extends Service
     ret = @$http.post(path, @sign_in_params)
     ret.then (response) =>
       @ngTiddleSessionService.setResource response.data[@tap.getModelName()], response.data.authentication_token
-      @tap.onAuthorize()
+      @tap.onAuthorize response.data
     ret
 
   signOut: ->
