@@ -37,7 +37,7 @@ gulp.task 'examples', ->
   .pipe plumber()
   .pipe ngClassify(appName: 'ng-tiddle-examples')
   .pipe coffee(bare: no)
-  .pipe(gulp.dest("examples"))
+  .pipe(gulp.dest('examples'))
 
 gulp.task 'server', ->
   connect.server(root: [__dirname], port: 8888)
