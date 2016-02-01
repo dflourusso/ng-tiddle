@@ -7,7 +7,7 @@ class NgTiddleAuth extends Provider
     @return_path = '/'
     @api_resource_path = 'users'
 
-    @$get = ($location) ->
+    @$get = ->
       getApiRoot: => @api_root
       setApiRoot: (api_root) => @api_root = api_root
 
@@ -26,5 +26,5 @@ class NgTiddleAuth extends Provider
       getApiResourcePath: => @api_resource_path
       setApiResourcePath: (api_resource_path) => @api_resource_path = api_resource_path
 
-      onUnauthorized: => $location.path @sign_in_path
-      onAuthorize: => $location.path @return_path
+      onUnauthorized: -> console.warn 'No unauthorized callback was defined'
+      onAuthorize: -> console.info 'No authorize callback was defined'
