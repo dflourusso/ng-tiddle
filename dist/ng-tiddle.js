@@ -59,8 +59,6 @@
       this.api_root = 'http://localhost:3000/';
       this.model_name = 'user';
       this.sign_in_strategy = 'email';
-      this.sign_in_path = '/auth/sign_in';
-      this.return_path = '/';
       this.api_resource_path = 'users';
       this.$get = function() {
         return {
@@ -92,26 +90,6 @@
           setSignInStrategy: (function(_this) {
             return function(sign_in_strategy) {
               return _this.sign_in_strategy = sign_in_strategy;
-            };
-          })(this),
-          getSignInPath: (function(_this) {
-            return function() {
-              return _this.sign_in_path;
-            };
-          })(this),
-          setSignInPath: (function(_this) {
-            return function(sign_in_path) {
-              return _this.sign_in_path = sign_in_path;
-            };
-          })(this),
-          getReturnPath: (function(_this) {
-            return function() {
-              return _this.return_path;
-            };
-          })(this),
-          setReturnPath: (function(_this) {
-            return function(return_path) {
-              return _this.return_path = return_path;
             };
           })(this),
           getApiResourcePath: (function(_this) {
@@ -178,8 +156,9 @@
   angular.module('ng-tiddle').service('ngTiddleAuthService', ['$http', 'ngTiddleSessionService', 'ngTiddleAuthProvider', NgTiddleAuth]);
 
   NgTiddleSession = (function() {
-    function NgTiddleSession(kvStorageService) {
+    function NgTiddleSession(kvStorageService, ngTiddleAuthProvider1) {
       this.kvStorageService = kvStorageService;
+      this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
     }
 
     NgTiddleSession.prototype.setResource = function(resource, token) {
@@ -188,26 +167,28 @@
         return;
       }
       try {
-        this.kvStorageService.token = token;
+        this.kvStorageService.tiddle_token = token;
       } catch (undefined) {}
-      this.kvStorageService.resource = JSON.stringify(resource);
+      this.kvStorageService.tiddle_resource = JSON.stringify(resource);
       return this.resource = resource;
     };
 
     NgTiddleSession.prototype.getResource = function() {
-      if (this.kvStorageService.resource) {
-        return this.resource = JSON.parse(this.kvStorageService.resource);
+      if (!this.kvStorageService.tiddle_resource) {
+        this.ngTiddleAuthProvider.onUnauthorized();
+        return;
       }
+      return this.resource = JSON.parse(this.kvStorageService.tiddle_resource);
     };
 
     NgTiddleSession.prototype.getToken = function() {
-      return this.kvStorageService.token;
+      return this.kvStorageService.tiddle_token;
     };
 
     NgTiddleSession.prototype.clear = function() {
       try {
-        delete this.kvStorageService.resource;
-        delete this.kvStorageService.token;
+        delete this.kvStorageService.tiddle_resource;
+        delete this.kvStorageService.tiddle_token;
         return this.resource = void 0;
       } catch (undefined) {}
     };
@@ -216,7 +197,7 @@
 
   })();
 
-  angular.module('ng-tiddle').service('ngTiddleSessionService', ['kvStorageService', NgTiddleSession]);
+  angular.module('ng-tiddle').service('ngTiddleSessionService', ['kvStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
 
   KvStorage = (function() {
     function KvStorage() {
