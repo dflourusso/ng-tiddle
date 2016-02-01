@@ -10,7 +10,10 @@ class NgTiddleSession extends Service
     @resource = resource
 
   getResource: ->
-    @resource = JSON.parse(@kvStorageService.tiddle_resource) if @kvStorageService.tiddle_resource
+    unless @kvStorageService.tiddle_resource
+      @ngTiddleAuthProvider.onUnauthorized()
+      return
+    @resource = JSON.parse(@kvStorageService.tiddle_resource)
 
   getToken: ->
     @kvStorageService.tiddle_token
