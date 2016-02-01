@@ -15,8 +15,8 @@ class NgTiddleAuth extends Provider
       getModelName: -> properties.model_name
       setModelName: (model_name) -> properties.model_name = model_name
 
-      getSignInStrategy: -> properties.ign_in_strategy
-      setSignInStrategy: (sign_in_strategy) -> properties.ign_in_strategy = sign_in_strategy
+      getSignInStrategy: -> properties.sign_in_strategy
+      setSignInStrategy: (sign_in_strategy) -> properties.sign_in_strategy = sign_in_strategy
 
       getApiResourcePath: -> properties.api_resource_path
       setApiResourcePath: (api_resource_path) -> properties.api_resource_path = api_resource_path
