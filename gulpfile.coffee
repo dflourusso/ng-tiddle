@@ -11,6 +11,7 @@ sourcemaps   = require 'gulp-sourcemaps'
 notify       = require 'gulp-notify'
 gutil        = require 'gulp-util'
 autoprefixer = require 'gulp-autoprefixer'
+bump         = require 'gulp-bump'
 del          = require 'del'
 
 gulp.task 'build', ->
@@ -49,3 +50,8 @@ gulp.task 'default', ['build', 'examples']
 
 gulp.task 'clear', ->
   del 'dist/'
+
+gulp.task 'bump', ->
+  gulp.src ['./bower.json', './package.json']
+  .pipe bump()
+  .pipe gulp.dest './'
