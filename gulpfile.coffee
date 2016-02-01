@@ -1,22 +1,8 @@
 gulp         = require 'gulp'
 es           = require 'event-stream'
-order        = require 'gulp-order'
-concat       = require 'gulp-concat'
-coffee       = require 'gulp-coffee'
-plumber      = require 'gulp-plumber'
-connect      = require 'gulp-connect'
-ngClassify   = require 'gulp-ng-classify'
-uglify       = require 'gulp-uglify'
-sourcemaps   = require 'gulp-sourcemaps'
-notify       = require 'gulp-notify'
-gutil        = require 'gulp-util'
-autoprefixer = require 'gulp-autoprefixer'
-bump         = require 'gulp-bump'
 argv         = require('yargs').argv
-tag_version  = require 'gulp-tag-version'
-filter       = require 'gulp-filter'
-git          = require 'gulp-git'
 del          = require 'del'
+$            = require('gulp-load-plugins')()
 
 gulp.task 'build', ->
   lib =
@@ -24,27 +10,27 @@ gulp.task 'build', ->
 
   js =
     gulp.src 'src/**/*.coffee'
-    .pipe plumber()
-    .pipe ngClassify(appName: 'ng-tiddle')
-    .pipe concat('ng-tiddle.js')
-    .pipe coffee(bare: no)
+    .pipe $.plumber()
+    .pipe $.ngClassify(appName: 'ng-tiddle')
+    .pipe $.concat('ng-tiddle.js')
+    .pipe $.coffee(bare: no)
 
   es.merge(lib, js)
-    .pipe concat('ng-tiddle.js')
+    .pipe $.concat('ng-tiddle.js')
     .pipe gulp.dest 'dist'
-    .pipe(uglify())
-    .pipe(concat('ng-tiddle.min.js'))
+    .pipe($.uglify())
+    .pipe($.concat('ng-tiddle.min.js'))
     .pipe(gulp.dest('dist'))
 
 gulp.task 'examples', ->
   gulp.src 'examples/**/*.coffee'
-  .pipe plumber()
-  .pipe ngClassify(appName: 'ng-tiddle-examples')
-  .pipe coffee(bare: no)
+  .pipe $.plumber()
+  .pipe $.ngClassify(appName: 'ng-tiddle-examples')
+  .pipe $.coffee(bare: no)
   .pipe(gulp.dest('examples'))
 
 gulp.task 'server', ->
-  connect.server(root: [__dirname], port: 8888)
+  $.connect.server(root: [__dirname], port: 8888)
 
 gulp.task 'watch', ->
   gulp.watch 'src/**/*', ['build']
@@ -59,8 +45,8 @@ gulp.task 'clear', ->
 # Ou passar o tipo desejado: "gulp bump --type minor"
 gulp.task 'bump', ->
   gulp.src ['./bower.json', './package.json']
-  .pipe bump type: argv.type
+  .pipe $.bump type: argv.type
   .pipe gulp.dest './'
-  .pipe git.commit 'bumps package version'
-  .pipe filter 'bower.json'
-  .pipe tag_version(prefix: '')
+  .pipe $.git.commit 'bumps package version'
+  .pipe $.filter 'bower.json'
+  .pipe $.tag_version(prefix: '')
