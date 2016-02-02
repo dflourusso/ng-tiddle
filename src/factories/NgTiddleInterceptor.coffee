@@ -11,6 +11,7 @@ class NgTiddleInterceptor extends Factory
 
       responseError: (e) ->
         if e.status is 401
+          ngTiddleSessionService.clear()
           ngTiddleAuthProvider.onUnauthorized()
         $q.reject(e)
     }
