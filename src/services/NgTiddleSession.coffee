@@ -22,4 +22,4 @@ class NgTiddleSession extends Service
     try
       delete @kvStorageService.tiddle_resource
       delete @kvStorageService.tiddle_token
-      @resource = undefined
+      @resource = null
