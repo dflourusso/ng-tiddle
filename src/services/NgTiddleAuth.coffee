@@ -19,3 +19,6 @@ class NgTiddleAuth extends Service
     .then =>
       @ngTiddleSessionService.clear()
       @tap.onUnauthorized()
+
+  getResource: ->
+    @ngTiddleSessionService.getResource()
