@@ -38,6 +38,7 @@
         },
         responseError: function(e) {
           if (e.status === 401) {
+            ngTiddleSessionService.clear();
             ngTiddleAuthProvider.onUnauthorized();
           }
           return $q.reject(e);
@@ -178,7 +179,7 @@
       try {
         delete this.kvStorageService.tiddle_resource;
         delete this.kvStorageService.tiddle_token;
-        return this.resource = void 0;
+        return this.resource = null;
       } catch (undefined) {}
     };
 
