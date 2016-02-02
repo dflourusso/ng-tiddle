@@ -25,26 +25,23 @@
 
   NgTiddleInterceptor = (function() {
     function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider) {
-      var strategy;
-      strategy = ngTiddleAuthProvider.getSignInStrategy();
       return {
         request: function(config) {
-          var model_name;
+          var model_name, strategy;
           if (ngTiddleSessionService.getResource()) {
+            strategy = ngTiddleAuthProvider.getSignInStrategy();
             model_name = ngTiddleAuthProvider.getModelName();
             config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = ngTiddleSessionService.getResource()[strategy];
             config.headers[("X-" + model_name + "-TOKEN").toUpperCase()] = ngTiddleSessionService.getToken();
           }
           return config;
         },
-        responseError: (function(_this) {
-          return function(e) {
-            if (e.status === 401) {
-              ngTiddleAuthProvider.onUnauthorized();
-            }
-            return $q.reject(e);
-          };
-        })(this)
+        responseError: function(e) {
+          if (e.status === 401) {
+            ngTiddleAuthProvider.onUnauthorized();
+          }
+          return $q.reject(e);
+        }
       };
     }
 
