@@ -134,6 +134,10 @@
       })(this));
     };
 
+    NgTiddleAuth.prototype.getResource = function() {
+      return this.ngTiddleSessionService.getResource();
+    };
+
     return NgTiddleAuth;
 
   })();
