@@ -1,5 +1,6 @@
 class NgTiddleAuth extends Service
-  constructor: (@$http, @$timeout, @ngTiddleSessionService, @ngTiddleAuthProvider) ->
+  constructor: (@$http, @$timeout, @ngTiddleSessionService, ngTiddleAuthProvider) ->
+    @tap = ngTiddleAuthProvider
     @sign_in_params = {}
 
   signIn: (resource) ->
