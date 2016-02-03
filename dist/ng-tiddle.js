@@ -27,9 +27,9 @@
     function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
       return {
         request: function(config) {
-          var is_api, model_name, resource, strategy;
-          is_api = new RegExp("^" + (ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[0]));
-          if (is_api.test(config.url) && (resource = ngTiddleStorageService.get('tiddle_resource'))) {
+          var api_regexp, model_name, resource, strategy;
+          api_regexp = new RegExp((new URL(ngTiddleAuthProvider.getApiRoot())).host);
+          if (api_regexp.test(config.url) && (resource = ngTiddleStorageService.get('tiddle_resource'))) {
             strategy = ngTiddleAuthProvider.getSignInStrategy();
             model_name = ngTiddleAuthProvider.getModelName();
             config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = resource[strategy];
