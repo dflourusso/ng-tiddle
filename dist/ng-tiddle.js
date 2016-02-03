@@ -112,10 +112,11 @@
   angular.module('ng-tiddle').provider('ngTiddleAuthProvider', [NgTiddleAuth]);
 
   NgTiddleAuth = (function() {
-    function NgTiddleAuth($http, $timeout, ngTiddleSessionService, ngTiddleAuthProvider) {
+    function NgTiddleAuth($http, $timeout, ngTiddleSessionService1, ngTiddleAuthProvider1) {
       this.$http = $http;
-      this.ngTiddleSessionService = ngTiddleSessionService;
-      this.tap = ngTiddleAuthProvider;
+      this.$timeout = $timeout;
+      this.ngTiddleSessionService = ngTiddleSessionService1;
+      this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
       this.sign_in_params = {};
     }
 
@@ -127,7 +128,9 @@
       ret.then((function(_this) {
         return function(response) {
           _this.ngTiddleSessionService.setResource(response.data[_this.tap.getModelName()], response.data.authentication_token);
-          return _this.tap.onAuthorize(response.data);
+          return _this.$timeout((function() {
+            return _this.tap.onAuthorize(response.data);
+          }), 0);
         };
       })(this));
       return ret;
@@ -137,8 +140,8 @@
       return this.$http["delete"]((this.tap.getApiRoot()) + "/" + (this.tap.getApiResourcePath()) + "/sign_out").then((function(_this) {
         return function() {
           _this.ngTiddleSessionService.clear();
-          return $timeout((function() {
-            return this.tap.onUnauthorized();
+          return _this.$timeout((function() {
+            return _this.tap.onUnauthorized();
           }), 0);
         };
       })(this));
