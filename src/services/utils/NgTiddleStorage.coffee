@@ -2,8 +2,7 @@ class NgTiddleStorage extends Service
   constructor: (@ngTiddleAuthProvider, @$cookies) ->
 
   isLocalStorage: ->
-    return true if window.cordova || window.NATIVE
-    return true if window.localStorage && @ngTiddleAuthProvider.getKeepLoggedIn()
+    window.localStorage && @ngTiddleAuthProvider.getKeepLoggedIn()
 
   put: (key, value) ->
     if @isLocalStorage()
