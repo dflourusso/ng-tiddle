@@ -60,6 +60,12 @@ angularApp.run(['ngTiddleAuthProvider', function(ngTiddleAuthProvider) {
   ngTiddleAuthProvider.setModelName('user');
   ```
 
+* `KeepLoggedIn` -> Set 'true', to keep logged after close and reopen the browser:
+
+  ```javascript
+  ngTiddleAuthProvider.setKeepLoggedIn('true');
+  ```
+
 * `onUnauthorized:` -> Callback to be called when the application receive some response with code *401 - Unauthorized* from the server:
 
   ```javascript
