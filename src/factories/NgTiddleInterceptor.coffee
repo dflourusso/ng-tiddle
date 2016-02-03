@@ -2,7 +2,8 @@ class NgTiddleInterceptor extends Factory
   constructor: ($q, ngTiddleSessionService, ngTiddleAuthProvider) ->
     return {
       request: (config) ->
-        if ngTiddleSessionService.getResource()
+        is_api = new RegExp("^#{ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[0]}")
+        if is_api.test(config.url) && ngTiddleSessionService.getResource()
           strategy = ngTiddleAuthProvider.getSignInStrategy()
           model_name = ngTiddleAuthProvider.getModelName()
           config.headers["X-#{model_name}-#{strategy}".toUpperCase()] = ngTiddleSessionService.getResource()[strategy]
