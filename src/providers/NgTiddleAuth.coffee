@@ -5,6 +5,7 @@ class NgTiddleAuth extends Provider
       model_name: 'user'
       sign_in_strategy: 'email'
       api_resource_path: 'users'
+      keep_logged_in: false
 
     @$get = ->
       properties = @properties
@@ -20,6 +21,9 @@ class NgTiddleAuth extends Provider
 
       getApiResourcePath: -> properties.api_resource_path
       setApiResourcePath: (api_resource_path) -> properties.api_resource_path = api_resource_path
+
+      getKeepLoggedIn: -> properties.keep_logged_in
+      setKeepLoggedIn: (keep_logged_in) -> properties.keep_logged_in = keep_logged_in
 
       onUnauthorized: -> console.warn 'No unauthorized callback was defined'
       onAuthorize: (auth_data) -> console.info 'No authorize callback was defined', auth_data
