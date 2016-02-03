@@ -1,5 +1,5 @@
 class NgTiddleAuth extends Service
-  constructor: ($http, ngTiddleSessionService, ngTiddleAuthProvider) ->
+  constructor: ($http, $timeout, ngTiddleSessionService, ngTiddleAuthProvider) ->
     @$http = $http
     @ngTiddleSessionService = ngTiddleSessionService
     @tap = ngTiddleAuthProvider
@@ -18,7 +18,7 @@ class NgTiddleAuth extends Service
     @$http.delete("#{@tap.getApiRoot()}/#{@tap.getApiResourcePath()}/sign_out")
     .then =>
       @ngTiddleSessionService.clear()
-      @tap.onUnauthorized()
+      $timeout((-> @tap.onUnauthorized()), 0)
 
   getResource: ->
     @ngTiddleSessionService.getResource()
