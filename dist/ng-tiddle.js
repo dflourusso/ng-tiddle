@@ -112,11 +112,11 @@
   angular.module('ng-tiddle').provider('ngTiddleAuthProvider', [NgTiddleAuth]);
 
   NgTiddleAuth = (function() {
-    function NgTiddleAuth($http, $timeout, ngTiddleSessionService1, ngTiddleAuthProvider1) {
+    function NgTiddleAuth($http, $timeout, ngTiddleSessionService1, ngTiddleAuthProvider) {
       this.$http = $http;
       this.$timeout = $timeout;
       this.ngTiddleSessionService = ngTiddleSessionService1;
-      this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
+      this.tap = ngTiddleAuthProvider;
       this.sign_in_params = {};
     }
 
