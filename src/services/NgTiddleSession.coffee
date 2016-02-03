@@ -13,10 +13,9 @@ class NgTiddleSession extends Service
     @resource = resource
 
   getResource: ->
-    unless @ngTiddleStorageService.get(@resource_prefix)
-      @ngTiddleAuthProvider.onUnauthorized()
-      return
-    @resource = @ngTiddleStorageService.get @resource_prefix
+    @resource = @ngTiddleStorageService.get(@resource_prefix)
+    @ngTiddleAuthProvider.onUnauthorized() unless @resource
+    @resource
 
   getToken: ->
     @ngTiddleStorageService.get @token_prefix
