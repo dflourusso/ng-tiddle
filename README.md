@@ -1,57 +1,103 @@
 # Ng Tiddle Auth
 
+A simple implementation to integrate with the *Rails Gem [Tiddle](https://github.com/adamniedzielski/tiddle)*
+
 ---
-## Instalação
+### Installation
 
-`bower install ng-tiddle --save`
+    $ bower install ng-tiddle --save
 
-## Como usar
+### Usage
 
-### Inclua o *Javascript* no seu projeto.
+Include the plugin in your application:
 
-    <script src="../dist/ng-tiddle.js"></script>`
+```html
+<script src="../dist/ng-tiddle.js"></script>`
+```
 
+And then include the *AngularJs* module:
 
-### Adicione em seu módulo angular:
+```javascript
+angular.module('app', ['ng-tiddle']);
+```
 
-    angular.module('app', ['ng-tiddle'])
+### Configuration
 
-### Configure as rotas e callbacks para a diretiva utilizando o *ngTiddleAuthProvider*:
-> Altere de acordo com sua aplicação.
- Exemplo para alterar uma configuração: `ngTiddleAuthProvider.setApiRoot('http://localhost:3001')`
+#### Provider
 
-**Configurações disponíveis:**
+Create a AngularJs **run** to set `ngTiddleAuthProvider` configurations.
 
-* `ApiRoot` -> Host da API a ser utilizada para autenticação. Ex: **http://localhost:3000**
-* `SignInStrategy` -> Nome da key utilizada pelo devise para realizar a autenticação. Default: **email**
-* `ApiResourcePath` -> Path base para autenticação. Ex: **users**
-* `onUnauthorized:` -> Callback a ser executado quando for feita alguma requisição com usuário não logado.
+```javascript
+angularApp.run(['ngTiddleAuthProvider', function(ngTiddleAuthProvider) {
+    return ngTiddleAuthProvider.setApiRoot('http://localhost:3000');
+  }
+])
+```
 
- * Example:
+**Available options:**
 
-    `ngTiddleAuthProvider.onUnauthorized = function(){console.log('Faça alguma coisa');}`
+* `ApiRoot` -> API url used to authentication:
+
+  ```javascript
+  ngTiddleAuthProvider.setApiRoot('http://localhost:3000');
+  ```
+
+* `SignInStrategy` -> Devise strategy used to authentication. Default: **email**:
+
+  ```javascript
+  ngTiddleAuthProvider.setSignInStrategy('email');
+  ```
+
+* `ApiResourcePath` -> Url path used to authentication:
+
+  ```javascript
+  ngTiddleAuthProvider.setApiResourcePath('users');
+  ```
+
+* `ModelName` -> Name of your model:
+
+  ```javascript
+  ngTiddleAuthProvider.setModelName('user');
+  ```
+
+* `onUnauthorized:` -> Callback to be called when the application receive some response with code *401 - Unauthorized* from the server:
+
+  ```javascript
+  ngTiddleAuthProvider.onUnauthorized = function(){$location.path('/auth/login');}
+  ```
 
 * `onAuthorize:` -> Callback a ser executado quando login for realizado com sucesso.
 
- * Example:
+  ```javascript
+  ngTiddleAuthProvider.onAuthorize = function(auth_data){
+    $location.path('/app/home');
+  }
+  ```
 
-    `ngTiddleAuthProvider.onAuthorize = function(auth_data){console.log(auth_data);}`
+### Using the services
 
+#### `ngTiddleAuthService`
 
-### Efetuar **signIn**
+Do SignIn:
 
-Utilize o service **ngTiddleAuthService**.
+```javascript
+ngTiddleAuthService.signIn({email: '', password: ''});
+```
 
-Ex: `ngTiddleAuthService.signIn({email: '', password: ''})`
+Do SignOut:
 
-### Efetuar **signOut**
+```javascript
+ngTiddleAuthService.signOut();
+```
 
-Utilize o service **ngTiddleAuthService**.
+#### `ngTiddleSessionService`
 
-Ex: `ngTiddleAuthService.signOut()`
+Get user logged:
 
-### Obter usuário logado
+```javascript
+ngTiddleSessionService.getResource();
+```
 
-Utilize o service **ngTiddleSessionService**.
+### Author
 
-Ex: `ngTiddleSessionService.getResource()`
+[Daniel Fernando Lourusso](http://dflourusso.com.br)
