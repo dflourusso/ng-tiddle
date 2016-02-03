@@ -1,5 +1,5 @@
 (function() {
-  var KvStorage, NgTiddleApp, NgTiddleAuth, NgTiddleInterceptor, NgTiddleSession, PushInterceptors;
+  var NgTiddleApp, NgTiddleAuth, NgTiddleInterceptor, NgTiddleSession, NgTiddleStorage, PushInterceptors;
 
   NgTiddleApp = (function() {
     function NgTiddleApp() {
@@ -157,8 +157,8 @@
 
     NgTiddleSession.prototype.resource_prefix = 'tiddle_resource';
 
-    function NgTiddleSession(kvStorageService, ngTiddleAuthProvider1) {
-      this.kvStorageService = kvStorageService;
+    function NgTiddleSession(ngTiddleStorageService, ngTiddleAuthProvider1) {
+      this.ngTiddleStorageService = ngTiddleStorageService;
       this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
     }
 
@@ -167,26 +167,26 @@
         this.clear();
         return;
       }
-      this.kvStorageService.put(this.token_prefix, token);
-      this.kvStorageService.put(this.resource_prefix, resource);
+      this.ngTiddleStorageService.put(this.token_prefix, token);
+      this.ngTiddleStorageService.put(this.resource_prefix, resource);
       return this.resource = resource;
     };
 
     NgTiddleSession.prototype.getResource = function() {
-      if (!this.kvStorageService.get(this.resource_prefix)) {
+      if (!this.ngTiddleStorageService.get(this.resource_prefix)) {
         this.ngTiddleAuthProvider.onUnauthorized();
         return;
       }
-      return this.resource = this.kvStorageService.get(this.resource_prefix);
+      return this.resource = this.ngTiddleStorageService.get(this.resource_prefix);
     };
 
     NgTiddleSession.prototype.getToken = function() {
-      return this.kvStorageService.get(this.token_prefix);
+      return this.ngTiddleStorageService.get(this.token_prefix);
     };
 
     NgTiddleSession.prototype.clear = function() {
-      this.kvStorageService.remove(this.resource_prefix);
-      this.kvStorageService.remove(this.token_prefix);
+      this.ngTiddleStorageService.remove(this.resource_prefix);
+      this.ngTiddleStorageService.remove(this.token_prefix);
       return this.resource = null;
     };
 
@@ -194,35 +194,34 @@
 
   })();
 
-  angular.module('ng-tiddle').service('ngTiddleSessionService', ['kvStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
+  angular.module('ng-tiddle').service('ngTiddleSessionService', ['ngTiddleStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
 
-  KvStorage = (function() {
-    function KvStorage(ngTiddleAuthProvider1, $cookies) {
+  NgTiddleStorage = (function() {
+    function NgTiddleStorage(ngTiddleAuthProvider1, $cookies) {
       this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
       this.$cookies = $cookies;
     }
 
-    KvStorage.prototype.storageType = function() {
+    NgTiddleStorage.prototype.isLocalStorage = function() {
       if (window.cordova || window.NATIVE) {
-        return 'localStorage';
+        return true;
       }
       if (window.localStorage && this.ngTiddleAuthProvider.getKeepLoggedIn()) {
-        return 'localStorage';
+        return true;
       }
-      return 'cookiesStorage';
     };
 
-    KvStorage.prototype.put = function(key, value) {
-      if (this.storageType() === 'localStorage') {
+    NgTiddleStorage.prototype.put = function(key, value) {
+      if (this.isLocalStorage()) {
         window.localStorage[key] = JSON.stringify(value);
         return;
       }
       return this.$cookies.putObject(key, value);
     };
 
-    KvStorage.prototype.get = function(key) {
+    NgTiddleStorage.prototype.get = function(key) {
       var p;
-      if (this.storageType() === 'localStorage') {
+      if (this.isLocalStorage()) {
         if (p = window.localStorage[key]) {
           return JSON.parse(p);
         } else {
@@ -232,18 +231,18 @@
       return this.$cookies.getObject(key);
     };
 
-    KvStorage.prototype.remove = function(key) {
-      if (this.storageType() === 'localStorage') {
+    NgTiddleStorage.prototype.remove = function(key) {
+      if (this.isLocalStorage()) {
         delete window.localStorage[key];
         return;
       }
       return this.$cookies.remove(key);
     };
 
-    return KvStorage;
+    return NgTiddleStorage;
 
   })();
 
-  angular.module('ng-tiddle').service('kvStorageService', ['ngTiddleAuthProvider', '$cookies', KvStorage]);
+  angular.module('ng-tiddle').service('ngTiddleStorageService', ['ngTiddleAuthProvider', '$cookies', NgTiddleStorage]);
 
 }).call(this);
