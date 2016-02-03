@@ -27,8 +27,9 @@
     function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider) {
       return {
         request: function(config) {
-          var model_name, strategy;
-          if (ngTiddleSessionService.getResource()) {
+          var is_api, model_name, strategy;
+          is_api = new RegExp("^" + (ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[0]));
+          if (is_api.test(config.url) && ngTiddleSessionService.getResource()) {
             strategy = ngTiddleAuthProvider.getSignInStrategy();
             model_name = ngTiddleAuthProvider.getModelName();
             config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = ngTiddleSessionService.getResource()[strategy];
@@ -178,11 +179,11 @@
     };
 
     NgTiddleSession.prototype.getResource = function() {
-      if (!this.ngTiddleStorageService.get(this.resource_prefix)) {
+      this.resource = this.ngTiddleStorageService.get(this.resource_prefix);
+      if (!this.resource) {
         this.ngTiddleAuthProvider.onUnauthorized();
-        return;
       }
-      return this.resource = this.ngTiddleStorageService.get(this.resource_prefix);
+      return this.resource;
     };
 
     NgTiddleSession.prototype.getToken = function() {
