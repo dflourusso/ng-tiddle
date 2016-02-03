@@ -1,8 +1,5 @@
 class NgTiddleAuth extends Service
-  constructor: ($http, $timeout, ngTiddleSessionService, ngTiddleAuthProvider) ->
-    @$http = $http
-    @ngTiddleSessionService = ngTiddleSessionService
-    @tap = ngTiddleAuthProvider
+  constructor: (@$http, @$timeout, @ngTiddleSessionService, @ngTiddleAuthProvider) ->
     @sign_in_params = {}
 
   signIn: (resource) ->
@@ -11,14 +8,14 @@ class NgTiddleAuth extends Service
     ret = @$http.post(path, @sign_in_params)
     ret.then (response) =>
       @ngTiddleSessionService.setResource response.data[@tap.getModelName()], response.data.authentication_token
-      @tap.onAuthorize response.data
+      @$timeout((=> @tap.onAuthorize(response.data)), 0)
     ret
 
   signOut: ->
     @$http.delete("#{@tap.getApiRoot()}/#{@tap.getApiResourcePath()}/sign_out")
     .then =>
       @ngTiddleSessionService.clear()
-      $timeout((-> @tap.onUnauthorized()), 0)
+      @$timeout((=> @tap.onUnauthorized()), 0)
 
   getResource: ->
     @ngTiddleSessionService.getResource()
