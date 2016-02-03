@@ -1,4 +1,4 @@
-class KvStorage extends Service
+class NgTiddleStorage extends Service
   constructor: (@ngTiddleAuthProvider, @$cookies) ->
     # No cordova, utiliza localStorage se o browser suportar
     # caso contrário, $cookies do angular, já que não será persistente

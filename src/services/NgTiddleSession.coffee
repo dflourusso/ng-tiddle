@@ -2,26 +2,26 @@ class NgTiddleSession extends Service
   token_prefix: 'tiddle_token'
   resource_prefix: 'tiddle_resource'
 
-  constructor: (@kvStorageService, @ngTiddleAuthProvider) ->
+  constructor: (@ngTiddleStorageService, @ngTiddleAuthProvider) ->
 
   setResource: (resource, token) ->
     unless resource
       @clear()
       return
-    @kvStorageService.put @token_prefix, token
-    @kvStorageService.put @resource_prefix, resource
+    @ngTiddleStorageService.put @token_prefix, token
+    @ngTiddleStorageService.put @resource_prefix, resource
     @resource = resource
 
   getResource: ->
-    unless @kvStorageService.get(@resource_prefix)
+    unless @ngTiddleStorageService.get(@resource_prefix)
       @ngTiddleAuthProvider.onUnauthorized()
       return
-    @resource = @kvStorageService.get @resource_prefix
+    @resource = @ngTiddleStorageService.get @resource_prefix
 
   getToken: ->
-    @kvStorageService.get @token_prefix
+    @ngTiddleStorageService.get @token_prefix
 
   clear: ->
-    @kvStorageService.remove @resource_prefix
-    @kvStorageService.remove @token_prefix
+    @ngTiddleStorageService.remove @resource_prefix
+    @ngTiddleStorageService.remove @token_prefix
     @resource = null
