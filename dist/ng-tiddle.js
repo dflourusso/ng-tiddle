@@ -112,7 +112,7 @@
   angular.module('ng-tiddle').provider('ngTiddleAuthProvider', [NgTiddleAuth]);
 
   NgTiddleAuth = (function() {
-    function NgTiddleAuth($http, ngTiddleSessionService, ngTiddleAuthProvider) {
+    function NgTiddleAuth($http, $timeout, ngTiddleSessionService, ngTiddleAuthProvider) {
       this.$http = $http;
       this.ngTiddleSessionService = ngTiddleSessionService;
       this.tap = ngTiddleAuthProvider;
@@ -137,7 +137,9 @@
       return this.$http["delete"]((this.tap.getApiRoot()) + "/" + (this.tap.getApiResourcePath()) + "/sign_out").then((function(_this) {
         return function() {
           _this.ngTiddleSessionService.clear();
-          return _this.tap.onUnauthorized();
+          return $timeout((function() {
+            return this.tap.onUnauthorized();
+          }), 0);
         };
       })(this));
     };
@@ -150,7 +152,7 @@
 
   })();
 
-  angular.module('ng-tiddle').service('ngTiddleAuthService', ['$http', 'ngTiddleSessionService', 'ngTiddleAuthProvider', NgTiddleAuth]);
+  angular.module('ng-tiddle').service('ngTiddleAuthService', ['$http', '$timeout', 'ngTiddleSessionService', 'ngTiddleAuthProvider', NgTiddleAuth]);
 
   NgTiddleSession = (function() {
     NgTiddleSession.prototype.token_prefix = 'tiddle_token';
