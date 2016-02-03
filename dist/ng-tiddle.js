@@ -24,15 +24,15 @@
   angular.module('ng-tiddle').config(['$httpProvider', PushInterceptors]);
 
   NgTiddleInterceptor = (function() {
-    function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider) {
+    function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
       return {
         request: function(config) {
-          var is_api, model_name, strategy;
+          var is_api, model_name, resource, strategy;
           is_api = new RegExp("^" + (ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[0]));
-          if (is_api.test(config.url) && ngTiddleSessionService.getResource()) {
+          if (is_api.test(config.url) && (resource = ngTiddleStorageService.get('tiddle_resource'))) {
             strategy = ngTiddleAuthProvider.getSignInStrategy();
             model_name = ngTiddleAuthProvider.getModelName();
-            config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = ngTiddleSessionService.getResource()[strategy];
+            config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = resource[strategy];
             config.headers[("X-" + model_name + "-TOKEN").toUpperCase()] = ngTiddleSessionService.getToken();
           }
           return config;
@@ -51,7 +51,7 @@
 
   })();
 
-  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', 'ngTiddleSessionService', 'ngTiddleAuthProvider', NgTiddleInterceptor]);
+  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', 'ngTiddleSessionService', 'ngTiddleAuthProvider', 'ngTiddleStorageService', NgTiddleInterceptor]);
 
   NgTiddleAuth = (function() {
     function NgTiddleAuth() {
@@ -163,8 +163,8 @@
 
     NgTiddleSession.prototype.resource_prefix = 'tiddle_resource';
 
-    function NgTiddleSession(ngTiddleStorageService, ngTiddleAuthProvider1) {
-      this.ngTiddleStorageService = ngTiddleStorageService;
+    function NgTiddleSession(ngTiddleStorageService1, ngTiddleAuthProvider1) {
+      this.ngTiddleStorageService = ngTiddleStorageService1;
       this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
     }
 
