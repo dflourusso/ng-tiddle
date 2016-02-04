@@ -1,5 +1,5 @@
 class NgTiddleInterceptor extends Factory
-  constructor: ($q, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) ->
+  constructor: ($q, $timeout, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) ->
     return {
       request: (config) ->
         _api_regexp = new RegExp(ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[1])
@@ -14,6 +14,6 @@ class NgTiddleInterceptor extends Factory
       responseError: (e) ->
         if e.status is 401
           ngTiddleSessionService.clear()
-          ngTiddleAuthProvider.onUnauthorized()
+          $timeout((=> ngTiddleAuthProvider.onUnauthorized()), 0)
         $q.reject(e)
     }

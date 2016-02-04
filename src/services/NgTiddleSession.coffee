@@ -2,7 +2,7 @@ class NgTiddleSession extends Service
   token_prefix: 'tiddle_token'
   resource_prefix: 'tiddle_resource'
 
-  constructor: (@ngTiddleStorageService, @ngTiddleAuthProvider) ->
+  constructor: (@$timeout, @ngTiddleStorageService, @ngTiddleAuthProvider) ->
 
   setResource: (resource, token) ->
     unless resource
@@ -14,7 +14,7 @@ class NgTiddleSession extends Service
 
   getResource: ->
     @resource = @ngTiddleStorageService.get(@resource_prefix)
-    @ngTiddleAuthProvider.onUnauthorized() unless @resource
+    @$timeout((=> @ngTiddleAuthProvider.onUnauthorized()), 0) unless @resource
     @resource
 
   getToken: ->
