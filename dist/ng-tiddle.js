@@ -24,7 +24,7 @@
   angular.module('ng-tiddle').config(['$httpProvider', PushInterceptors]);
 
   NgTiddleInterceptor = (function() {
-    function NgTiddleInterceptor($q, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
+    function NgTiddleInterceptor($q, $timeout, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
       return {
         request: function(config) {
           var _api_regexp, _resource, model_name, strategy;
@@ -41,7 +41,11 @@
         responseError: function(e) {
           if (e.status === 401) {
             ngTiddleSessionService.clear();
-            ngTiddleAuthProvider.onUnauthorized();
+            $timeout(((function(_this) {
+              return function() {
+                return ngTiddleAuthProvider.onUnauthorized();
+              };
+            })(this)), 0);
           }
           return $q.reject(e);
         }
@@ -52,7 +56,7 @@
 
   })();
 
-  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', 'ngTiddleSessionService', 'ngTiddleAuthProvider', 'ngTiddleStorageService', NgTiddleInterceptor]);
+  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', '$timeout', 'ngTiddleSessionService', 'ngTiddleAuthProvider', 'ngTiddleStorageService', NgTiddleInterceptor]);
 
   NgTiddleAuth = (function() {
     function NgTiddleAuth() {
@@ -114,9 +118,9 @@
   angular.module('ng-tiddle').provider('ngTiddleAuthProvider', [NgTiddleAuth]);
 
   NgTiddleAuth = (function() {
-    function NgTiddleAuth($http, $timeout, ngTiddleSessionService1, ngTiddleAuthProvider) {
+    function NgTiddleAuth($http, $timeout1, ngTiddleSessionService1, ngTiddleAuthProvider) {
       this.$http = $http;
-      this.$timeout = $timeout;
+      this.$timeout = $timeout1;
       this.ngTiddleSessionService = ngTiddleSessionService1;
       this.tap = ngTiddleAuthProvider;
       this.sign_in_params = {};
@@ -164,7 +168,8 @@
 
     NgTiddleSession.prototype.resource_prefix = 'tiddle_resource';
 
-    function NgTiddleSession(ngTiddleStorageService1, ngTiddleAuthProvider1) {
+    function NgTiddleSession($timeout1, ngTiddleStorageService1, ngTiddleAuthProvider1) {
+      this.$timeout = $timeout1;
       this.ngTiddleStorageService = ngTiddleStorageService1;
       this.ngTiddleAuthProvider = ngTiddleAuthProvider1;
     }
@@ -182,7 +187,11 @@
     NgTiddleSession.prototype.getResource = function() {
       this.resource = this.ngTiddleStorageService.get(this.resource_prefix);
       if (!this.resource) {
-        this.ngTiddleAuthProvider.onUnauthorized();
+        this.$timeout(((function(_this) {
+          return function() {
+            return _this.ngTiddleAuthProvider.onUnauthorized();
+          };
+        })(this)), 0);
       }
       return this.resource;
     };
@@ -201,7 +210,7 @@
 
   })();
 
-  angular.module('ng-tiddle').service('ngTiddleSessionService', ['ngTiddleStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
+  angular.module('ng-tiddle').service('ngTiddleSessionService', ['$timeout', 'ngTiddleStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
 
   NgTiddleStorage = (function() {
     function NgTiddleStorage(ngTiddleAuthProvider1, $cookies) {
@@ -210,12 +219,7 @@
     }
 
     NgTiddleStorage.prototype.isLocalStorage = function() {
-      if (window.cordova || window.NATIVE) {
-        return true;
-      }
-      if (window.localStorage && this.ngTiddleAuthProvider.getKeepLoggedIn()) {
-        return true;
-      }
+      return window.localStorage && this.ngTiddleAuthProvider.getKeepLoggedIn();
     };
 
     NgTiddleStorage.prototype.put = function(key, value) {
