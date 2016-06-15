@@ -16,8 +16,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.3",
+    "angular": "~1.5.6",
     "jquery": "~2.1.4",
-    "angular-cookies": "^1.4.9"
+    "angular-cookies": "^1.5.6"
   }
 }
