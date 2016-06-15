@@ -23,41 +23,6 @@
 
   angular.module('ng-tiddle').config(['$httpProvider', PushInterceptors]);
 
-  NgTiddleInterceptor = (function() {
-    function NgTiddleInterceptor($q, $timeout, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
-      return {
-        request: function(config) {
-          var _api_regexp, _resource, model_name, strategy;
-          _api_regexp = new RegExp(ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[1]);
-          _resource = ngTiddleStorageService.get('tiddle_resource');
-          if (_api_regexp.test(config.url) && _resource) {
-            strategy = ngTiddleAuthProvider.getSignInStrategy();
-            model_name = ngTiddleAuthProvider.getModelName();
-            config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = _resource[strategy];
-            config.headers[("X-" + model_name + "-TOKEN").toUpperCase()] = ngTiddleSessionService.getToken();
-          }
-          return config;
-        },
-        responseError: function(e) {
-          if (e.status === 401) {
-            ngTiddleSessionService.clear();
-            $timeout(((function(_this) {
-              return function() {
-                return ngTiddleAuthProvider.onUnauthorized();
-              };
-            })(this)), 0);
-          }
-          return $q.reject(e);
-        }
-      };
-    }
-
-    return NgTiddleInterceptor;
-
-  })();
-
-  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', '$timeout', 'ngTiddleSessionService', 'ngTiddleAuthProvider', 'ngTiddleStorageService', NgTiddleInterceptor]);
-
   NgTiddleAuth = (function() {
     function NgTiddleAuth() {
       this.properties = {
@@ -211,6 +176,41 @@
   })();
 
   angular.module('ng-tiddle').service('ngTiddleSessionService', ['$timeout', 'ngTiddleStorageService', 'ngTiddleAuthProvider', NgTiddleSession]);
+
+  NgTiddleInterceptor = (function() {
+    function NgTiddleInterceptor($q, $timeout, ngTiddleSessionService, ngTiddleAuthProvider, ngTiddleStorageService) {
+      return {
+        request: function(config) {
+          var _api_regexp, _resource, model_name, strategy;
+          _api_regexp = new RegExp(ngTiddleAuthProvider.getApiRoot().match('^(?:https?:)?(?:\/\/)?([^\/\?]+)')[1]);
+          _resource = ngTiddleStorageService.get('tiddle_resource');
+          if (_api_regexp.test(config.url) && _resource) {
+            strategy = ngTiddleAuthProvider.getSignInStrategy();
+            model_name = ngTiddleAuthProvider.getModelName();
+            config.headers[("X-" + model_name + "-" + strategy).toUpperCase()] = _resource[strategy];
+            config.headers[("X-" + model_name + "-TOKEN").toUpperCase()] = ngTiddleSessionService.getToken();
+          }
+          return config;
+        },
+        responseError: function(e) {
+          if (e.status === 401) {
+            ngTiddleSessionService.clear();
+            $timeout(((function(_this) {
+              return function() {
+                return ngTiddleAuthProvider.onUnauthorized();
+              };
+            })(this)), 0);
+          }
+          return $q.reject(e);
+        }
+      };
+    }
+
+    return NgTiddleInterceptor;
+
+  })();
+
+  angular.module('ng-tiddle').factory('NgTiddleInterceptor', ['$q', '$timeout', 'ngTiddleSessionService', 'ngTiddleAuthProvider', 'ngTiddleStorageService', NgTiddleInterceptor]);
 
   NgTiddleStorage = (function() {
     function NgTiddleStorage(ngTiddleAuthProvider1, $cookies) {
